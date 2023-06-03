@@ -23,13 +23,14 @@ export async function getContactById(contactId) {
 }
 
 export async function removeContact(contactId) {
-  // try {
-  //   const allContacts = await listContacts();
-  //   const filteredContacts = allContacts.filter(({ id }) => id !== contactId);
-  //   return filteredContacts;
-  // } catch (err) {
-  //   console.log("err", err);
-  // }
+  const allContacts = await listContacts();
+  const index = allContacts.findIndex(({id}) => id === contactId);
+  if (index === -1) {
+    return null;
+  }
+  const [result] = allContacts.splice(index, 1);
+  await writeFile(pathToContacts, JSON.stringify(allContacts, null, 2));
+  return result;
 }
 
 export async function addContact(name, email, phone) {
@@ -49,4 +50,3 @@ export async function addContact(name, email, phone) {
     console.log("err", err);
   }
 }
-
